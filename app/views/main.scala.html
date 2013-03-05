@@ -1,0 +1,35 @@
+@(title: String)
+
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Welcome To PHM Platform</title>
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+<script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
+
+
+</head>
+<body>
+
+
+	<div id="stylized" class="myform">
+		<form id="form" name="form" method="post">
+			<h1>Login form</h1>
+			<p>This is the basic look of my pHm platform</p>
+
+			<label>Username <span class="small">Add your name</span></label>
+			 <input type="text" name="name" id="name" />
+			  <label>Password <span class="small">Add your password</span></label>
+			<input type="password" name="password" id="password" /> 
+			<label>UserType <span class="small">Add your user type</span></label>
+			<input type="text" name="usertype" id="usertype" />
+			<button type="submit">Login</button>
+			<div class="spacer"></div>
+
+		</form>
+	</div>
+
+</body>
+</html>
