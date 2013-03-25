@@ -1,4 +1,12 @@
 This is your new Play 2.1 application
 =====================================
-
 This file will be packaged with your application, when using `play dist`.
+
+Steps To import Project into eclipse
+====================================
+
+1.Go to the project location then do "play eclipse"  (ex:c:\phm_platform play>play eclipse)
+2.Then go to eclipse and then import the project into eclipse.
+
+
+

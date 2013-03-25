@@ -2,13 +2,27 @@ package controllers;
 
 import static play.libs.Json.toJson;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.node.ObjectNode;
+
+import models.User;
+import models.Patient;
+import play.Logger;
+import dao.CoreDaoImpl;
+
+import play.api.templates.Html;
 import play.data.DynamicForm;
 import play.db.jpa.Transactional;
+import play.libs.Json;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
+import resources.GlobalConstants;
 import service.UserAuthService;
 import views.html.*;
 
@@ -17,44 +31,57 @@ public class Application extends Controller {
 	@Transactional
 	public static Result index() {
 
+		new CoreDaoImpl().findPatientByUserId(101);
+
 		return ok(index.render("Your new application is ready."));
 
 	}
 
-	public static Result getlogin() {
-		return ok(main.render("Welcome to PhmHealth"));
-	}
-
 	@Transactional
+	@BodyParser.Of(BodyParser.Json.class)
 	public static Result login() {
-		// Users user = JPA.em("default").find(Users.class, 1);
-		DynamicForm requestData = new DynamicForm().bindFromRequest();
-		String username = requestData.get("name");
-		System.out.println("<<<<<<<<<<<<<<<<<<<<" + username);
-		String password = requestData.get("password");
-		String userType = requestData.get("usertype");
 
-		boolean test = UserAuthService.authenticateUser(username, password,
-				Integer.parseInt(userType));
-		if (test) {
-			Map<String, String> d = new HashMap<String, String>();
-			d.put("user", username);
-			d.put("status", "authenticated");
-			Map<String, Map> m = new HashMap<String, Map>();
-			m.put("AutenticationResponse", d);
-			return ok(toJson(m));
+		JsonNode json = request().body().asJson();
+		String username = json.findPath(GlobalConstants.USERNAME)
+				.getTextValue();
+		String password = json.findPath(GlobalConstants.PASSWORD)
+				.getTextValue();
+		Integer userType = Integer.parseInt(json.findPath(
+				GlobalConstants.USERTYPE).getTextValue());
+		Logger.debug("username " + username + "password *******" + "userType "
+				+ userType);
+		List<User> userRes = UserAuthService.authenticateUser(username,
+				password, userType);
+		List<Patient> patientList = null;
+		if (userRes != null && userRes.size() > 0) {
+			patientList = UserAuthService.getPatientByUser(userRes.get(0)
+					.getId());
+			// System.out.println(Json.toJson(patientList));
+			List<Map<String, Object>> strPatienlist = new ArrayList<Map<String, Object>>();
+
+			for (Patient p : patientList) {
+				Map<String, Object> pMap = new HashMap<String, Object>();
+				pMap.put(GlobalConstants.PATIENTID, p.getPatientId());
+				pMap.put(GlobalConstants.PATIENTFIRSTNAME, p.getFirstname());
+				pMap.put(GlobalConstants.PATIENTLASTNAME, p.getLastname());
+				pMap.put(GlobalConstants.PATIENTLOC, p.getLocation());
+				strPatienlist.add(pMap);
+			}
+			Map<String, List<Map<String, Object>>> patienMap = new HashMap<String, List<Map<String, Object>>>();
+			patienMap.put(GlobalConstants.PATIENTS, strPatienlist);
+			return ok(toJson(patienMap));
+
 		} else {
-			Map<String, String> d = new HashMap<String, String>();
-			d.put("user", username);
-			d.put("status", "Notauthenticated");
-			Map<String, Map> m = new HashMap<String, Map>();
-			m.put("AutenticationResponse", d);
-			return ok(toJson(m));
+
+			Map<String, String> failRes = new HashMap<String, String>();
+			failRes.put(GlobalConstants.USERNAME, username);
+			failRes.put(GlobalConstants.STATUS, GlobalConstants.STATUSINFO);
+			Map<String, Map> finalMap = new HashMap<String, Map>();
+			finalMap.put(GlobalConstants.STATUSHEADER, failRes);
+			return ok(toJson(finalMap));
+
 		}
-		// if(user.getEmail().equals(name))
-		// return ok("Congrats");
-		// else
-		// return ok("sorry");
+
 	}
 
 }

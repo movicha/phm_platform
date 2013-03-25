@@ -2,7 +2,6 @@ package models;
 
 import java.io.Serializable;
 import javax.persistence.*;
-
 import java.util.Date;
 
 
@@ -27,9 +26,14 @@ public class PatientUser implements Serializable {
 	@Column(name="authorization_request")
 	private Date authorizationRequest;
 
+	//bi-directional many-to-one association to Patient
+	@ManyToOne
+	@JoinColumn(name="patient_id",insertable=false,updatable=false)
+	private Patient patient;
+
 	//bi-directional many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="user_id" ,insertable=false,updatable=false)
+	@JoinColumn(name="user_id",insertable=false,updatable=false)
 	private User user;
 
 	public PatientUser() {
@@ -65,6 +69,14 @@ public class PatientUser implements Serializable {
 
 	public void setAuthorizationRequest(Date authorizationRequest) {
 		this.authorizationRequest = authorizationRequest;
+	}
+
+	public Patient getPatient() {
+		return this.patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 
 	public User getUser() {

@@ -1,0 +1,24 @@
+@(patientList: List[models.Patient],isAuthenticate:Boolean,message:String)
+
+
+<h3>Welcome to phm patient List </h3> 
+    
+    
+   "isAuthenticate": @isAuthenticate,
+    @if(patientList == null){
+         "message" : "@message"
+    }else{
+    "message" : "@message",
+    
+   <ul>
+    		@for(patientProperties <- patientList){
+	       <li> {
+	        <b>patientid</b>@patientProperties.getPatientId(),
+	        <b>firstname</b>: @patientProperties.getFirstname(),   
+	        <b>lastname</b>: @patientProperties.getLastname(),   
+	        <b>location</b> : @patientProperties.getLocation()
+	        }</li>
+	        }
+   		   </ul>
+   		   }
+

@@ -9,6 +9,8 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import models.Patient;
+import models.PatientUser;
 import models.User;
 import models.UserType;
 import play.db.jpa.JPA;
@@ -16,7 +18,7 @@ import play.db.jpa.JPA;
 public class CoreDaoImpl implements CoreDao {
 
 	@Override
-	public boolean findUser(String username, String password, int userType) {
+	public List<User> findUser(String username, String password, int userType) {
 		// TODO Auto-generated method stub
 
 		CriteriaBuilder cb = JPA.em().getCriteriaBuilder();
@@ -39,10 +41,12 @@ public class CoreDaoImpl implements CoreDao {
 //		{
 //			System.out.println(us.getPassword());
 //		}
-		if(userRes!=null&&userRes.size()>0)
-			return true;
-		else
-			return false;
+//		if(userRes!=null&&userRes.size()>0)
+//			return true;
+//		else
+//			return false;
+		
+		return userRes;
 
 	}
 	
@@ -54,5 +58,34 @@ public class CoreDaoImpl implements CoreDao {
 		TypedQuery<User> userResult = JPA.em().createQuery(query);
 		List<User> userRes = userResult.getResultList();
 	 */
+	
+	@Override
+	public List<Patient> findPatientByUserId(Integer userId)
+	{
+		CriteriaBuilder cb = JPA.em().getCriteriaBuilder();
+		CriteriaQuery<Patient> query = cb.createQuery(Patient.class);
+		Root<Patient> patient = query.from(Patient.class);
+		Join<Patient,PatientUser> patientUser =
+				patient.join("patientUsers");
+		Join<PatientUser,User> userT =
+				patientUser.join("user");
+		query.select(patient);
+
+		Predicate preUsername = cb.equal(userT.get("id"),userId); //Step 4
+		//Predicate prePassword=  cb.equal(user.get("password"),password); //Step 4
+		Predicate preUsertype = cb.equal(patientUser.get("patient").get("patientId"),patient.get("patientId"));
+
+		Predicate pAnd = cb.and(preUsername,preUsertype); //Step 4
+		query.where(pAnd);
+		TypedQuery<Patient> userResult = JPA.em().createQuery(query);
+		List<Patient> userRes = userResult.getResultList();
+		for(Patient p : userRes)
+		{
+			System.out.println(p.getFirstname());
+			System.out.println(p.getLastname());
+		}
+		
+		return userRes;
+	}
 
 }
