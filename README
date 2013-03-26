@@ -10,3 +10,50 @@ Steps To import Project into eclipse
 
 
 
+Steps to Checkout and checkin the phm platfrom sprint1 code from Git
+====================================================================
+
+Below  is the location for 
+
+https://github.com/clouidio/phm_platform.git
+
+For to checkin into phm_init-demo
+
+1.Create a folder say c:\phm
+
+2. Run the following command
+   git clone https://github.com/clouidio/phm_platform.git phm_platform_sprint1
+   Once if this is successful
+
+3.Cd to C:\phm\phm_platform_sprint1  and then run the following
+
+4.git checkout -b phm_init_demo
+
+5.git pull origin phm_init_demo
+
+  Now at this code checkout from branch phm_init-demo is done
+
+  For to checkin the code changes into this phm_init_demo.
+
+6. Let say the latest code you are going to checkin is in  c:\phmproject and if all the files needs to checkin.
+   Then run the following 
+   cp -r c:\phmproject\* c:\phm\phm_platform_sprint1
+
+7. Only some files needs changes then you copy or override only that files.
+   
+
+8. Commit your changes using
+   git commit -a -m 'Checkin message' 
+
+9.  Push the commited code
+    git push origin phm_init_demo
+
+10. Verify changes in the location https://github.com/clouidio/phm_platform.git in branch phm_init_demo.
+
+
+
+
+
+
+
+
