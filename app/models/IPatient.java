@@ -2,7 +2,7 @@ package models;
 
 import java.util.ArrayList;
 
-import resources.CodingConcept;
+import resources.CodeableConcept;
 import resources.FHIRResourceDictionary;
 import resources.ResourceReference;
 
@@ -18,7 +18,7 @@ public interface IPatient extends Resource {
 	public ArrayList identifier(); //THIS ARRAY IS FILLED WITH "HumanId" OBJECTS ONLY.. An identifier that applies to this person as a patient
 	public Demographics details(); //Patient Demographic details
 	public ResourceReference provider(); //The provider for whom this is a patient record
-	public CodingConcept diet(); //Dietary restrictions for the patient
-	public CodingConcept confidentiality(); //Confidentiality of the patient records
-	public CodingConcept recordLocation(); //The location of the paper record for the patient, if there is one
+	public CodeableConcept diet(); //Dietary restrictions for the patient
+	public CodeableConcept confidentiality(); //Confidentiality of the patient records
+	public CodeableConcept recordLocation(); //The location of the paper record for the patient, if there is one
 }

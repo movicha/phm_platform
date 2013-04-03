@@ -21,7 +21,7 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import resources.GlobalConstants;
-import service.ScheduleService;
+// import service.ScheduleService;
 import service.UserAuthService;
 import views.html.*;
 import org.codehaus.jackson.JsonNode;
@@ -112,7 +112,7 @@ public class Application extends Controller {
 			visit.setScheduled_Duration(30);
 			visit.setVisit_Started(new Date(System.currentTimeMillis()));
 
-			ScheduleService.onStartService(visit);
+			// ScheduleService.onStartService(visit);
 			Map<String,Object> failRes = new HashMap<String,Object>();
 			failRes.put(GlobalConstants.VISITID,visit.getId());
 			failRes.put(GlobalConstants.VISITSTARTED,GlobalConstants.SUCCESS);
@@ -162,11 +162,11 @@ public class Application extends Controller {
 			visit.setId(Integer.parseInt(visitid));
 			visit.setPatient_ID(Integer.parseInt(patientid));
 			visit.setProvider_ID(Integer.parseInt(userid));
-			//visit.setScheduled_date(new Date(System.currentTimeMillis()));
+			// visit.setScheduled_date(new Date(System.currentTimeMillis()));
 			visit.setScheduled_Duration(Integer.parseInt(duration));
 			visit.setVisit_Completed(new Date(System.currentTimeMillis()));
 
-			ScheduleService.onEndService(visit);
+			// ScheduleService.onEndService(visit);
 			Map<String,Object> failRes = new HashMap<String,Object>();
 			failRes.put(GlobalConstants.VISITID,visit.getId());
 			failRes.put(GlobalConstants.VISITENDED,GlobalConstants.SUCCESS);

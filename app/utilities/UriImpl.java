@@ -1,34 +1,20 @@
-package models;
+package utilities;
 
+import java.net.URI;
 import java.util.Iterator;
 import java.util.List;
 
 import resources.Extension;
 
-public class ContactImpl implements Contact {
+public class UriImpl implements Uri {	
+	private URI value;
 
-	@Override
-	public ContactSystem system() {
-		// TODO Auto-generated method stub
-		return null;
+	public URI getValue() {
+		return value;
 	}
 
-	@Override
-	public ContactUse use() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String value() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Period period() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setValue(URI value) {
+		this.value = value;
 	}
 
 	@Override
