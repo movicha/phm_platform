@@ -2,6 +2,7 @@ package dao;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,6 +14,7 @@ import models.Patient;
 import models.PatientUser;
 import models.User;
 import models.UserType;
+import models.Visit;
 import play.db.jpa.JPA;
 
 public class CoreDaoImpl implements CoreDao {
@@ -79,13 +81,40 @@ public class CoreDaoImpl implements CoreDao {
 		query.where(pAnd);
 		TypedQuery<Patient> userResult = JPA.em().createQuery(query);
 		List<Patient> userRes = userResult.getResultList();
-		for(Patient p : userRes)
-		{
-			System.out.println(p.getFirstname());
-			System.out.println(p.getLastname());
-		}
+//		for(Patient p : userRes)
+//		{
+//			System.out.println(p.getName());
+//		}
 		
 		return userRes;
 	}
+	
+	@Override
+	public void saveOnStartService(Visit visit) throws Exception
+	{
+		EntityManager em = JPA.em();
+		em.persist(visit);
+		//visit.
+	}
+	
+	
+	@Override
+	public void updateOnStartService(Visit visit) throws Exception
+	{
+		
+		try{EntityManager em = JPA.em();
+		Visit readVisit = em.find(Visit.class,visit.getId());
+		readVisit.setVisit_Completed(visit.getVisit_Completed());
+		readVisit.setScheduled_Duration(visit.getScheduled_Duration());
+		//readVisit
+		//em.(readVisit);
+		em.persist(readVisit);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		//visit.
+	}
+	
 
 }
