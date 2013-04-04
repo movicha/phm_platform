@@ -1,34 +1,25 @@
-package models;
+package resources;
 
 import java.util.Iterator;
 import java.util.List;
 
-import resources.Extension;
-
-public class ContactImpl implements Contact {
-
-	@Override
-	public ContactSystem system() {
-		// TODO Auto-generated method stub
-		return null;
+public class DateTime implements Type {
+	private String value;
+	
+	public DateTime() {
+		value = new String();
+	}
+	
+	public DateTime(String value) {
+		this.value = value;
 	}
 
-	@Override
-	public ContactUse use() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getValue() {
+		return value;
 	}
 
-	@Override
-	public String value() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Period period() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	@Override

@@ -2,8 +2,6 @@ package models;
 
 import resources.Type;
 
-
-
 // Uses MySQL as backing data store
 // Needs play.db.jpa.Model implementation
 public interface Contact extends Type  {
