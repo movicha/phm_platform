@@ -47,6 +47,7 @@ public class Visit implements Serializable {
 	@OneToMany(mappedBy="visit")
 	private List<VisitNote> visitNotes;
 
+	private int visitDuration;
 	public Visit() {
 	}
 
@@ -144,6 +145,14 @@ public class Visit implements Serializable {
 
 	public void setVisitNotes(List<VisitNote> visitNotes) {
 		this.visitNotes = visitNotes;
+	}
+
+	public int getVisitDuration() {
+		return visitDuration;
+	}
+
+	public void setVisitDuration(int visitDuration) {
+		this.visitDuration = visitDuration;
 	}
 
 }

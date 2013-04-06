@@ -1,8 +1,9 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import models.Patient;
+import models.PatientUser;
 import models.User;
 import dao.CoreDaoImpl;
 
@@ -13,9 +14,16 @@ public class UserAuthService {
 		return new CoreDaoImpl().findUser(username, password, userType);
 	}
 	
-	public static List<Patient> getPatientByUser(Integer userId)
+	public static List<Integer> getPatientByUser(Integer userId)
 	{
-		return new CoreDaoImpl().findPatientByUserId(userId);
+		List<PatientUser> patientUser = new CoreDaoImpl().findPatientByUserId(userId);
+		List<Integer> patienIdList    = new ArrayList<Integer>();
+		for(PatientUser pUser : patientUser)
+		{
+			patienIdList.add(pUser.getId().getPatientId());
+		}
+		
+		return patienIdList;
 	}
 
 }
