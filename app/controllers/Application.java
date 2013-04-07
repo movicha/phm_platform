@@ -13,7 +13,8 @@ import models.User;
 import models.Visit;
 
 import org.codehaus.jackson.JsonNode;
-
+import play.libs.WS;
+import play.libs.WS.Response;
 import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.BodyParser;
@@ -27,7 +28,7 @@ import views.html.*;
 
 public class Application extends Controller {
 
-	@Transactional
+
 	public static Result index() {
 
 		new CoreDaoImpl().findPatientByUserId(1);
@@ -69,16 +70,24 @@ public class Application extends Controller {
 			//System.out.println(Json.toJson(patientList));
 			List<Map<String,Object>> strPatienlist = new ArrayList<Map<String,Object>>();
 
-
-			for(Integer p :patientList)
+			StringBuffer sb = new StringBuffer();
+			if(patientList.size()>0)
 			{
+				for(Integer p :patientList)
+				{
 
-				//need to call the casendra service and create the json
-				System.out.println(p);
+					System.out.println(p);
+					sb.append(p+"-");
+				}
+				play.libs.F.Promise<Response> promise = WS.url("http://localhost:9020/getpatientlist/"+sb.toString()).setContentType("Application/json").get();
+				//System.out.println(sb.toString()+" response from service json"+promise.get().asJson());
+				return ok(promise.get().asJson());
+			}else
+			{
+				Map<String ,List<Map<String,Object>>> patienMap = new HashMap<String, List<Map<String,Object>>>();
+				patienMap.put(GlobalConstants.PATIENTS, strPatienlist);
+				return ok(toJson(patienMap));
 			}
-			Map<String ,List<Map<String,Object>>> patienMap = new HashMap<String, List<Map<String,Object>>>();
-			patienMap.put(GlobalConstants.PATIENTS, strPatienlist);
-			return ok(toJson(patienMap));
 
 			//return this to forntend
 		}else
@@ -100,7 +109,7 @@ public class Application extends Controller {
 	{
 		"doctorid" : "1",
 		"patientid" : "1", // What is the encoding used on the server? 
-		
+
 	}
 	 * @return
 	 */
@@ -142,7 +151,7 @@ public class Application extends Controller {
 		}
 
 	}
-	
+
 	/**
 	 * 
 	{
@@ -151,7 +160,7 @@ public class Application extends Controller {
 		"visitid":"1",
 		"duration":"30"
 		 // What is the encoding used on the server? 
-		
+
 	}
 	 * @return
 	 */
