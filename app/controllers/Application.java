@@ -8,13 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import models.PatientUser;
 import models.User;
 import models.Visit;
 
 import org.codehaus.jackson.JsonNode;
-import play.libs.WS;
-import play.libs.WS.Response;
+
 import play.Logger;
 import play.db.jpa.Transactional;
 import play.mvc.BodyParser;
@@ -23,6 +21,7 @@ import play.mvc.Result;
 import resources.GlobalConstants;
 import service.ScheduleService;
 import service.UserAuthService;
+import views.html.index;
 import dao.CoreDaoImpl;
 import views.html.*;
 
@@ -64,24 +63,18 @@ public class Application extends Controller {
 		Logger.debug("username "+username+"password *******"+"userType "+userType);
 		List<User> userRes = UserAuthService.authenticateUser(username, password, userType);
 		List<Integer> patientList = null;
+		
 		if(userRes!=null&&userRes.size()>0)
 		{
-			patientList = UserAuthService.getPatientByUser(userRes.get(0).getId());
+			int userId= userRes.get(0).getId();
+			patientList = UserAuthService.getPatientByUser(userId);
 			//System.out.println(Json.toJson(patientList));
 			List<Map<String,Object>> strPatienlist = new ArrayList<Map<String,Object>>();
 
-			StringBuffer sb = new StringBuffer();
+			
 			if(patientList.size()>0)
 			{
-				for(Integer p :patientList)
-				{
-
-					System.out.println(p);
-					sb.append(p+"-");
-				}
-				play.libs.F.Promise<Response> promise = WS.url("http://localhost:9020/getpatientlist/"+sb.toString()).setContentType("Application/json").get();
-				//System.out.println(sb.toString()+" response from service json"+promise.get().asJson());
-				return ok(promise.get().asJson());
+				return ok(UserAuthService.getPatientJson(patientList, userId, username));
 			}else
 			{
 				Map<String ,List<Map<String,Object>>> patienMap = new HashMap<String, List<Map<String,Object>>>();
