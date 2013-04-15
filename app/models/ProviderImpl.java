@@ -13,7 +13,7 @@ import java.util.*;
  * A person who represents an organization, and is authorized to perform actions
  * on its behalf
  */
-public class ProviderImpl implements Provider {
+public class ProviderImpl implements Provider { 
 
 	/**
 	 * An identifier that applies to this person in this role

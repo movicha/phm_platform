@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import resources.CodeableConcept;
 import resources.FHIRResourceDictionary;
 import resources.ResourceReference;
-
-
+import resources.ResourceType;
 
 // Uses MySQL and Cassandra as backing data store
 // Needs two implememations - one to play.db.jpa.Model, one to play.db.nosql.Model
 public interface IPatient extends Resource {
-	public Integer getResourceType(); //override method. Returns integer of specified type, in this case Patient
+	public ResourceType getResourceType(); //override method. Returns integer of specified type, in this case Patient
 	public FHIRResourceDictionary patientDictionary();
 	public ArrayList link(); //THIS ARRAY IS FILLED WITH "ResourceReference" OBJECTS ONLY. A linked patient record is a record that concerns the same patient. Records are linked after it is realized that at least one was created in error.
 	public boolean active(); //Whether the patient record is in use, or has been removed from active use

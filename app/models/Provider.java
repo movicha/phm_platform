@@ -1,15 +1,24 @@
 package models;
 
+import java.util.List;
+
 import resources.CodeableConcept;
 import resources.Identifier;
+import resources.ResourceReference;
 
 // Uses MySQL as backing data store
 // Needs play.db.jpa.Model implementation
-public interface Provider {
-	public Identifier identifier(); //An identifier that applies to this person in this role
-	public Demographics details(); //Demographic details
-	public Resource organization(); //The organisation that is being represented
-	public CodeableConcept role(); //The way in which the person represents the organisation - what role do they have?
-	public CodeableConcept specialty(); //A specific specialty within the healthcare facility under which the agent acts
-	public Period period(); //The time period during which the agent was/is authorised to represent the organisation.
+public interface Provider extends Resource {
+	public List<Identifier> getIdentifier();
+	public Demographics getDetails();
+	public void setDetails(Demographics value);
+	public ResourceReference getOrganization();
+	public void setOrganization(ResourceReference value);
+	public List<CodeableConcept> getRole();
+	public List<CodeableConcept> getSpecialty();
+	public Period getPeriod();
+	public void setPeriod(Period value);
+	public List<Address> getAddress();
+	public List<Contact> getContact();
 }
+
