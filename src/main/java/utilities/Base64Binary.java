@@ -1,5 +1,9 @@
-package utlities;
+package utilities;
+
+import resources.Type;
 
 public interface Base64Binary extends Type {
-	private ArrayList<Byte> bytes;
+	public byte[] getValue();
+
+	public void setValue(byte[] value);
 }

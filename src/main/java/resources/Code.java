@@ -1,5 +1,7 @@
 package resources;
 
 public interface Code extends Type {
-	private String codeText;
+	public String getCodeText();
+
+	public void setCodeText(String codeText);
 }

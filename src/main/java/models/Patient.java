@@ -1,18 +1,28 @@
 package models;
 
+import java.util.ArrayList;
+
 import resources.*;
 
 // Uses MySQL and Cassandra as backing data store
-// Needs two implememations - one to play.db.jpa.Model, one to play.db.nosql.Model
+// Needs two implementations - one to play.db.jpa.Model, one to play.db.nosql.Model
 public interface Patient extends Resource {
-	private Integer getResourceType; //override method. Returns integer of specified type, in this case Patient
-	private FHIRResourceDictionary patientDictionary;
-	private ArrayList link; //THIS ARRAY IS FILLED WITH "ResourceReference" OBJECTS ONLY. A linked patient record is a record that concerns the same patient. Records are linked after it is realized that at least one was created in error.
-	private boolean active; //Whether the patient record is in use, or has been removed from active use
-	private ArrayList identifier; //THIS ARRAY IS FILLED WITH "HumanId" OBJECTS ONLY.. An identifier that applies to this person as a patient
-	private Demographics details; //Patient Demographic details
-	private ResourceReference provider; //The provider for whom this is a patient record
-	private CodeableConcept diet; //Dietary restrictions for the patient
-	private CodeableConcept confidentiality; //Confidentiality of the patient records
-	private CodeableConcept recordLocation; //The location of the paper record for the patient, if there is one
+	public Integer getGetResourceType();
+	public void setGetResourceType(Integer getResourceType);
+	public ArrayList<ResourceReference> getLink();
+	public void setLink(ArrayList<ResourceReference> link);
+	public boolean isActive();
+	public void setActive(boolean active);
+	public ArrayList<Identifier> getIdentifier();
+	public void setIdentifier(ArrayList<Identifier> identifier);
+	public Demographics getDetails();
+	public void setDetails(Demographics details);
+	public ResourceReference getProvider();
+	public void setProvider(ResourceReference provider);
+	public CodeableConcept getDiet();
+	public void setDiet(CodeableConcept diet);
+	public CodeableConcept getConfidentiality();
+	public void setConfidentiality(CodeableConcept confidentiality);
+	public CodeableConcept getRecordLocation();
+	public void setRecordLocation(CodeableConcept recordLocation);
 }

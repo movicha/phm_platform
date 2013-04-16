@@ -1,15 +1,22 @@
 package resources;
 
-public interface HumanId extends Type {
-	private IdentifierUse use; //Identifies the use for this identifier, if known
-	private String label; //A label for the identifier that can be displayed to a human so they can recognise the identifier
-	private Identifier identifier; //The identifier itself
-	private Period period; //Time period during which identifier was valid for use
-	private ResourceReference assigner; //Organisation that issued/manages the identifier
+import models.Period;
 
-	protected enum IdentifierUse {
+public interface HumanId extends Type {
+	public enum IdentifierUse {
 	    IdentifierUseUusual, // the identifier recommended for display and use in real-world interactions
 	    IdentifierUseOfficial, // the identifier considered to be most trusted for the identification of this item
 	    IdentifierUseTemp //A temporary identifier
 	};
+	
+	public IdentifierUse getUse();
+	public void setUse(IdentifierUse use);
+	public String getLabel();
+	public void setLabel(String label);
+	public Identifier getIdentifier();
+	public void setIdentifier(Identifier identifier);
+	public Period getPeriod();
+	public void setPeriod(Period period);
+	public ResourceReference getAssigner();
+	public void setAssigner(ResourceReference assigner);
 }

@@ -84,4 +84,7 @@ object ApplicationBuild extends Build {
       publish := {}
     ).dependsOn(plugin)
 
+    lazy val appDependencies = Seq(
+    	"com.typesafe" % "slick_2.10.0-M7" % "0.11.1"
+    )
 }
