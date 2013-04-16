@@ -48,9 +48,10 @@ public class UserAuthService {
 			//System.out.println(p);
 			sb.append(p+"-");
 		}
-		play.libs.F.Promise<Response> promise = WS.url("http://localhost:9020/getpatientlist/"+sb.toString()).setContentType("Application/json").get();
+		//play.libs.F.Promise<Response> promise = WS.url("http://localhost:9020/getpatientlist/"+sb.toString()).setContentType("Application/json").get();
 		try{
-			JsonNode rootNode = mapper.readTree(promise.get().getBody());
+			JsonNode rootNode = toJson(DemographicsService.getPatientList(sb.toString()));
+			//JsonNode rootNode = mapper.readTree(promise.get().getBody());
 			((ObjectNode)rootNode).put("userid", userId);
 			return rootNode;
 		}catch(Exception e)
