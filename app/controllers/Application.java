@@ -118,11 +118,11 @@ public class Application extends Controller {
 		Logger.debug("userid "+userid+" patientid"+patientid);
 		try{
 			Visit visit = new Visit();
-			visit.setPatient_ID(Integer.parseInt(patientid));
-			visit.setProvider_ID(Integer.parseInt(userid));
-			visit.setScheduled_date(new Date(System.currentTimeMillis()));
+			//visit.setPatient_ID(Integer.parseInt(patientid));
+			//visit.setProvider_ID(Integer.parseInt(userid));
+			//visit.setScheduled_date((int) System.currentTimeMillis());
 			//visit.setScheduled_Duration(30);
-			visit.setVisit_Started(new Date(System.currentTimeMillis()));
+			visit.setVisit_Started((int) System.currentTimeMillis());
 
 			ScheduleService.onStartService(visit);
 			Map<String,Object> failRes = new HashMap<String,Object>();
@@ -172,11 +172,11 @@ public class Application extends Controller {
 		try{
 			Visit visit = new Visit();
 			visit.setId(Integer.parseInt(visitid));
-			visit.setPatient_ID(Integer.parseInt(patientid));
-			visit.setProvider_ID(Integer.parseInt(userid));
+			//visit.setPatient_ID(Integer.parseInt(patientid));
+			//visit.setProvider_ID(Integer.parseInt(userid));
 			//visit.setScheduled_date(new Date(System.currentTimeMillis()));
-			visit.setVisitDuration(Integer.parseInt(duration));
-			visit.setVisit_Completed(new Date(System.currentTimeMillis()));
+			visit.setVisitduration(Integer.parseInt(duration));
+			visit.setVisit_Completed((int) System.currentTimeMillis());
 
 			ScheduleService.onEndService(visit);
 			Map<String,Object> failRes = new HashMap<String,Object>();

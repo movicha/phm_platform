@@ -103,7 +103,7 @@ public class CoreDaoImpl implements CoreDao {
 		try{EntityManager em = JPA.em();
 		Visit readVisit = em.find(Visit.class,visit.getId());
 		readVisit.setVisit_Completed(visit.getVisit_Completed());
-		readVisit.setScheduled_Duration(visit.getScheduled_Duration());
+		readVisit.setVisitduration(visit.getVisitduration());
 		//readVisit
 		//em.(readVisit);
 		em.persist(readVisit);
