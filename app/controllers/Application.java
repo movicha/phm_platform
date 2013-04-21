@@ -105,8 +105,9 @@ public class Application extends Controller {
 	/**
 	 * 
 	{
-		"doctorid" : "1",
+		"providerid" : "1",
 		"patientid" : "1", // What is the encoding used on the server? 
+		"scheduleid":1
 
 	}
 	 * @return
@@ -117,19 +118,22 @@ public class Application extends Controller {
 	{
 
 		JsonNode json = request().body().asJson();
-		String userid = json.findPath(GlobalConstants.DOCTORID).getTextValue();
+		String userid = json.findPath(GlobalConstants.PROVIDERID).getTextValue();
 		String patientid = json.findPath(GlobalConstants.PATIENTID).getTextValue();
-		//Integer userType = Integer.parseInt(json.findPath(GlobalConstants.USERTYPE).getTextValue());
-		Logger.debug("userid "+userid+" patientid"+patientid);
+		String scheduleid = json.findPath(GlobalConstants.SCHEDULEID).getTextValue();
+		Logger.debug("userid "+userid+" patientid"+patientid+" scheduleid"+scheduleid);
 		try{
 			Visit visit = new Visit();
-			//visit.setPatient_ID(Integer.parseInt(patientid));
-			//visit.setProvider_ID(Integer.parseInt(userid));
-			//visit.setScheduled_date((int) System.currentTimeMillis());
-			//visit.setScheduled_Duration(30);
-			visit.setVisit_Started((int) System.currentTimeMillis());
+			int startTime =(int) ((System.currentTimeMillis())/1000);
+			visit.setVisit_Started(startTime);
 
 			ScheduleService.onStartService(visit);
+			Map<String , Integer> pPanel = new HashMap<String, Integer>();
+			pPanel.put(GlobalConstants.PATIENTID,Integer.parseInt(patientid));
+			pPanel.put(GlobalConstants.SCHEDULEID,Integer.parseInt(scheduleid));
+			pPanel.put(GlobalConstants.PROVIDERID,Integer.parseInt(userid));
+			pPanel.put(GlobalConstants.VISITID,visit.getId());
+			ScheduleService.updateVisitId(pPanel,visit);
 			Map<String,Object> failRes = new HashMap<String,Object>();
 			failRes.put(GlobalConstants.VISITID,visit.getId());
 			failRes.put(GlobalConstants.VISITSTARTED,GlobalConstants.SUCCESS);
@@ -138,7 +142,7 @@ public class Application extends Controller {
 			return ok(toJson(finalMap));
 		}catch(Exception e)
 		{
-
+			e.printStackTrace();
 			Map<String,Object> failRes = new HashMap<String,Object>();
 			failRes.put(GlobalConstants.VISITID,0);
 			failRes.put(GlobalConstants.VISITSTARTED,GlobalConstants.FAILURE);
@@ -153,7 +157,7 @@ public class Application extends Controller {
 	/**
 	 * 
 	{
-		"doctorid" : "1",
+		"providerid" : "1",
 		"patientid" : "1",
 		"visitid":"1",
 		"duration":"30"
@@ -168,7 +172,7 @@ public class Application extends Controller {
 	{
 
 		JsonNode json = request().body().asJson();
-		String userid = json.findPath(GlobalConstants.DOCTORID).getTextValue();
+		String userid = json.findPath(GlobalConstants.PROVIDERID).getTextValue();
 		String patientid = json.findPath(GlobalConstants.PATIENTID).getTextValue();
 		String visitid = json.findPath(GlobalConstants.VISITID).getTextValue();
 		String duration = json.findPath(GlobalConstants.DURATION).getTextValue();
@@ -177,11 +181,9 @@ public class Application extends Controller {
 		try{
 			Visit visit = new Visit();
 			visit.setId(Integer.parseInt(visitid));
-			//visit.setPatient_ID(Integer.parseInt(patientid));
-			//visit.setProvider_ID(Integer.parseInt(userid));
-			//visit.setScheduled_date(new Date(System.currentTimeMillis()));
 			visit.setVisitduration(Integer.parseInt(duration));
-			visit.setVisit_Completed((int) System.currentTimeMillis());
+			int endTime =(int) ((System.currentTimeMillis())/1000);
+			visit.setVisit_Completed(endTime);
 
 			ScheduleService.onEndService(visit);
 			Map<String,Object> failRes = new HashMap<String,Object>();

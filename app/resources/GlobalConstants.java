@@ -38,5 +38,7 @@ public interface GlobalConstants {
 	public final static String SCHEDULE_ID = "ScheduleId";
 	public final static String SCHEDULE_TIME = "ScheduleTime";
 	public final static String SCHEDULE_DURATION = "ScheduleDuration";
+	public final static String SCHEDULEID="scheduleid";
+	public final static String PROVIDERID="providerid";
 	
 }

@@ -2,6 +2,7 @@ package dao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -12,14 +13,13 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-
 import models.PatientPanel;
 import models.PatientUser;
-import models.ProviderSchedule;
 import models.User;
 import models.UserType;
 import models.Visit;
 import play.db.jpa.JPA;
+import resources.GlobalConstants;
 
 public class CoreDaoImpl implements CoreDao {
 
@@ -143,5 +143,28 @@ public class CoreDaoImpl implements CoreDao {
 		return resultList;
 	}
 	
+	public void updatedPatientPanel(Map<String,Integer>pPanel, Visit visit)
+	{
+		
+		//CriteriaBuilder cb = JPA.em().getCriteriaBuilder();
+		EntityManager em = JPA.em();
+		CriteriaQuery<PatientPanel> query = em.getCriteriaBuilder().createQuery(PatientPanel.class);
+		Root<PatientPanel> patienPanel = query.from(PatientPanel.class);
+		query.select(patienPanel);
 
+		Predicate prePatientId = em.getCriteriaBuilder().equal(patienPanel.get("patientId"),pPanel.get(GlobalConstants.PATIENTID)); //Step 4
+		Predicate preScheduleId = em.getCriteriaBuilder().equal(patienPanel.get("providerSchedule"),pPanel.get(GlobalConstants.SCHEDULEID));
+		Predicate preUserId = em.getCriteriaBuilder().equal(patienPanel.get("user"),pPanel.get(GlobalConstants.PROVIDERID));
+		//Predicate preUsername3 = em.getCriteriaBuilder().equal(user.get("visit"),null);
+		Predicate pAnd = em.getCriteriaBuilder().and(prePatientId,preScheduleId,preUserId); //Step 4
+		query.where(pAnd);
+		TypedQuery<PatientPanel> patienPanelResult = em.createQuery(query);
+		List<PatientPanel> patientPanelList = patienPanelResult.getResultList();
+		PatientPanel pPanel1 = patientPanelList.get(0);
+		//Visit readVisit = em.find(Visit.class,pPanel.get(GlobalConstants.VISITID));
+		pPanel1.setVisit(visit);
+		
+		em.persist(pPanel1);
+		
+	}
 }

@@ -6,8 +6,8 @@
 GET     /                           controllers.Application.index()
 #GET    /login                      controllers.Application.getlogin()
 POST  /1/login     controllers.Application.login()
-POST /1/starttimer controllers.Application.starttimer()
-POST /1/endtimer   controllers.Application.endtimer()
+POST /1/startencounter controllers.Application.starttimer()
+POST /1/endencounter   controllers.Application.endtimer()
 
 
 GET     /crtpatient/create/:patientname      controllers.CassandraCntrls.createPatient(patientname:String)

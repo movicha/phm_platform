@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.List;
+import java.util.Map;
 
 import models.PatientPanel;
 import models.PatientUser;
@@ -16,5 +17,5 @@ interface CoreDao {
 	public void updateOnStartService(Visit visit) throws Exception;
 	
 	public List<PatientPanel> patientPanelService(int providerId,int gmtDiffTime) throws Exception;
-
+	public void updatedPatientPanel(Map<String, Integer> pPanel, Visit visit);
 }

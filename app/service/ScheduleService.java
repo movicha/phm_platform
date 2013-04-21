@@ -1,10 +1,11 @@
 package service;
 
 import java.util.List;
+import java.util.Map;
 
-import dao.CoreDaoImpl;
 import models.PatientPanel;
 import models.Visit;
+import dao.CoreDaoImpl;
 
 public class ScheduleService {
 	
@@ -20,5 +21,8 @@ public class ScheduleService {
 	{
 		return new CoreDaoImpl().patientPanelService(providerId, gmtDiffTime);
 	}
-
+	public static void updateVisitId(Map<String,Integer> pPanel, Visit visit) throws Exception
+	{
+		new CoreDaoImpl().updatedPatientPanel(pPanel,visit);
+	}
 }
