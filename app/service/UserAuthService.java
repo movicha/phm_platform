@@ -2,11 +2,13 @@ package service;
 
 import static play.libs.Json.toJson;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import models.PatientPanel;
 import models.PatientUser;
 import models.User;
 
@@ -38,26 +40,29 @@ public class UserAuthService {
 		return patienIdList;
 	}
 
-	public static JsonNode getPatientJson(List<Integer> patientList, int userId, String username)
+	public static JsonNode getPatientJson(int userId, int gmtOffSet)
 	{
-		ObjectMapper mapper = new ObjectMapper();
-		StringBuffer sb = new StringBuffer();
-		for(Integer p :patientList)
-		{
-
-			//System.out.println(p);
-			sb.append(p+"-");
-		}
-		//play.libs.F.Promise<Response> promise = WS.url("http://localhost:9020/getpatientlist/"+sb.toString()).setContentType("Application/json").get();
+//		ObjectMapper mapper = new ObjectMapper();
+//		StringBuffer sb = new StringBuffer();
+//		for(Integer p :patientList)
+//		{
+//			sb.append(p+"-");
+//		}
 		try{
-			JsonNode rootNode = toJson(DemographicsService.getPatientList(sb.toString()));
+			//JsonNode rootNode = toJson(DemographicsService.getPatientList(sb.toString()));
+			
+			List<PatientPanel> patientPanelList = ScheduleService.patientPanelService(userId, gmtOffSet);
+
+			Map<String, List<Map<String, Object>>> patientMap = DemographicsService.getPatientList(patientPanelList, gmtOffSet);
+
+			JsonNode rootNode = toJson(patientMap);
 			//JsonNode rootNode = mapper.readTree(promise.get().getBody());
 			((ObjectNode)rootNode).put("userid", userId);
 			return rootNode;
 		}catch(Exception e)
 		{
 			Map<String,String> failRes = new HashMap<String,String>();
-			failRes.put(GlobalConstants.USERNAME,username);
+			failRes.put(GlobalConstants.USERNAME,""+userId);
 			failRes.put(GlobalConstants.STATUS,"Error in geting Patients");
 			return toJson(failRes);
 		}

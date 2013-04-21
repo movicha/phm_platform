@@ -1,12 +1,18 @@
 package service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import models.PatientPanel;
+
+import play.Logger;
 import play.db.jpa.Transactional;
 
 import com.clouidio.orm.api.base.NoSqlEntityManager;
@@ -163,31 +169,31 @@ public class DemographicsService {
 			pMap.put(GlobalConstants.PATIENT_ZIPCODE, addr.getZip());
 			//break;
 		}
-		//Map<String ,Map<String,Object>> patientMap = new HashMap<String, Map<String,Object>>();
-		//patientMap.put(GlobalConstants.PATIENTS, pMap);
-		//return patientMap;
 		return pMap;
 	}
 
-	public static Map<String, List<Map<String, Object>>> getPatientList(String patientIds) {
-		//PatientDemographics patient = JPA.em().find(PatientDemographics.class, Integer.parseInt(patientId));
-
-		String[] temp;
-
-		/* delimiter */
-		String delimiter = "-";
-		/* given string will be split by the argument delimiter provided. */
-		temp = patientIds.split(delimiter);
+	public static Map<String, List<Map<String, Object>>> getPatientList(List<PatientPanel> patientPanelList, int gmtOffSet) {
 		Map<String, Object> pMap = new HashMap<String, Object>();
 		List<Map<String, Object>> strPatienlist = new ArrayList<Map<String, Object>>();
-		for(String str : temp)
+
+		for(int count=0;count<patientPanelList.size();count++)
 		{
-			if(str!=null&&!str.equals(""))
-			{
-				pMap = getPatient(str);
-				strPatienlist.add(pMap);
-			}
-		}
+			PatientPanel panel = patientPanelList.get(count);
+			int patientId =  panel.getPatientId();
+			pMap = getPatient(""+patientId);
+			long scheduleTime = (long)(panel.getProviderSchedule().getScheduleTime()-gmtOffSet) * 1000;
+			Date sDate = new Date(scheduleTime);
+	        DateFormat format = new SimpleDateFormat("MMM dd HH:mm");
+	        String formatted = format.format(sDate);
+	        Logger.debug( "formatted date "+formatted+" schedule time "+scheduleTime+" gmtOffset "+gmtOffSet+" actual time "+panel.getProviderSchedule().getScheduleTime());
+
+		    //Logger.debug(" In  GetPatientDemographics : patientId "+patientId+" schedule "+scheduleTime+" sch time "+formatted);
+			pMap.put(GlobalConstants.SCHEDULE_TIME, formatted);
+			pMap.put(GlobalConstants.SCHEDULE_DURATION, panel.getProviderSchedule().getScheduleDuration());
+			pMap.put(GlobalConstants.SCHEDULE_ID, panel.getProviderSchedule().getScheduleId());
+			strPatienlist.add(pMap);
+		}	
+		
 		//Map<String ,Map<String,Object>> patientMap = new HashMap<String, Map<String,Object>>();
 		Map<String, List<Map<String, Object>>> patienMap = new HashMap<String, List<Map<String, Object>>>();
 		patienMap.put(GlobalConstants.PATIENTS, strPatienlist);

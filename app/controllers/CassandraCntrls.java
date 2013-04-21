@@ -2,6 +2,10 @@ package controllers;
 
 import static play.libs.Json.toJson;
 
+import java.util.List;
+
+import models.PatientPanel;
+
 
 
 
@@ -20,11 +24,6 @@ public class CassandraCntrls extends Controller {
         return ok(DemographicsService.createPatient(patientname));
     }
 
-    @Transactional(readOnly = true)
-    public static Result getPatientList(String patientIdList) {
-		return ok(toJson(DemographicsService.getPatientList(patientIdList)));
-    }
-    
     @Transactional(readOnly = true)
     public static Result getPatient(String patientId) {
 		return ok(toJson(DemographicsService.getPatient(patientId)));

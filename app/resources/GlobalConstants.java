@@ -34,5 +34,9 @@ public interface GlobalConstants {
 	public final static String ENDSERVICERESPONSE="endTimerServiceRes";
 	public final static String PATIENT_GENDER = "gender";
 	public final static String PATIENT_DATEOFBIRTH = "dateOfBirth";
+	public final static String GMT_OFFSET = "gmtOffSet";
+	public final static String SCHEDULE_ID = "ScheduleId";
+	public final static String SCHEDULE_TIME = "ScheduleTime";
+	public final static String SCHEDULE_DURATION = "ScheduleDuration";
 	
 }

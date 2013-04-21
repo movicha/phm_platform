@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -7,11 +8,14 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 
+import models.PatientPanel;
 import models.PatientUser;
+import models.ProviderSchedule;
 import models.User;
 import models.UserType;
 import models.Visit;
@@ -112,6 +116,32 @@ public class CoreDaoImpl implements CoreDao {
 			e.printStackTrace();
 		}
 		//visit.
+	}
+	
+	@Override
+	public List<PatientPanel> patientPanelService(int providerId, int gmtDiffTime) throws Exception {
+
+		CriteriaBuilder criteriaBuilder = JPA.em().getCriteriaBuilder();
+		CriteriaQuery<PatientPanel> criteriaQuery = criteriaBuilder.createQuery(PatientPanel.class);
+		Root<PatientPanel> from = criteriaQuery.from(PatientPanel.class);
+		Path<Number> path = from.join("providerSchedule").get("scheduleTime");
+		 
+		from.fetch("providerSchedule"); //FETCH product
+		Date date = new Date();
+		Long time = date.getTime();
+		Long epoachTime = time/1000;
+		
+		CriteriaQuery<PatientPanel> select = criteriaQuery.select(from);
+		select.where(criteriaBuilder.le(path, (epoachTime+28800)));
+		select.where(criteriaBuilder.ge(path, epoachTime));
+		 
+		TypedQuery<PatientPanel> typedQuery = JPA.em().createQuery(select);
+		List<PatientPanel> resultList = typedQuery.getResultList();
+		for(PatientPanel panel : resultList)
+		{
+			System.out.println(" Got results from Patient_panel : current time  "+epoachTime+" schedule id: "+panel.getProviderSchedule().getScheduleId()+" time "+panel.getProviderSchedule().getScheduleTime());
+		}
+		return resultList;
 	}
 	
 

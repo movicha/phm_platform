@@ -27,10 +27,15 @@ import views.html.*;
 
 public class Application extends Controller {
 
-
+	@Transactional
 	public static Result index() {
 
-		new CoreDaoImpl().findPatientByUserId(1);
+		try {
+			new CoreDaoImpl().patientPanelService(1, 9000);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return ok(index.render("Your new application is ready."));
 
@@ -57,10 +62,12 @@ public class Application extends Controller {
 	{
 
 		JsonNode json = request().body().asJson();
+		Logger.debug("login json "+json);
 		String username = json.findPath(GlobalConstants.USERNAME).getTextValue();
 		String password = json.findPath(GlobalConstants.PASSWORD).getTextValue();
+		int gmtOffSet  = (int)(json.findPath(GlobalConstants.GMT_OFFSET).getIntValue())*60;
 		Integer userType = Integer.parseInt(json.findPath(GlobalConstants.USERTYPE).getTextValue());
-		Logger.debug("username "+username+"password *******"+"userType "+userType);
+		Logger.debug("username "+username+"password *******"+"userType "+userType+" gmtoffset "+gmtOffSet);
 		List<User> userRes = UserAuthService.authenticateUser(username, password, userType);
 		List<Integer> patientList = null;
 		
@@ -74,7 +81,7 @@ public class Application extends Controller {
 			
 			if(patientList.size()>0)
 			{
-				return ok(UserAuthService.getPatientJson(patientList, userId, username));
+				return ok(UserAuthService.getPatientJson(userId, gmtOffSet));
 			}else
 			{
 				Map<String ,List<Map<String,Object>>> patienMap = new HashMap<String, List<Map<String,Object>>>();
@@ -85,8 +92,6 @@ public class Application extends Controller {
 			//return this to forntend
 		}else
 		{
-
-
 			Map<String,String> failRes = new HashMap<String,String>();
 			failRes.put(GlobalConstants.USERNAME,username);
 			failRes.put(GlobalConstants.STATUS,GlobalConstants.STATUSINFO);
@@ -199,4 +204,32 @@ public class Application extends Controller {
 
 	}
 
+	@Transactional
+	@BodyParser.Of(BodyParser.Json.class)
+	public static Result getPatientPanel()
+	{
+
+		JsonNode json = request().body().asJson();
+		int userId = json.findPath(GlobalConstants.USERID).getIntValue();
+		int gmtOffSet  = json.findPath(GlobalConstants.GMT_OFFSET).getIntValue();
+		Logger.debug("getPatientPanel : userId "+userId+" gmtOffSet "+gmtOffSet);
+		
+		if(userId>0)
+		{
+				return ok(UserAuthService.getPatientJson(userId, gmtOffSet));
+		}else
+		{
+			Map<String,String> failRes = new HashMap<String,String>();
+			failRes.put(GlobalConstants.USERID,""+userId);
+			failRes.put(GlobalConstants.STATUS,GlobalConstants.STATUSINFO);
+			Map<String ,Map> finalMap= new HashMap<String, Map>();
+			finalMap.put(GlobalConstants.STATUSHEADER, failRes);
+			return ok(toJson(finalMap));
+			//in this case user not valid
+		}
+
+	}
+
+	
+	
 }
