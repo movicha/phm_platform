@@ -30,7 +30,7 @@ public interface GlobalConstants {
 	public final static String FAILURE="failed";
 	public final static String STARTSERVICERESPONSE="startTimerServiceRes";
 	public final static String DURATION="duration";
-	public final static String VISITENDED="visittimeraended";
+	public final static String VISITENDED="visittimerEnded";
 	public final static String ENDSERVICERESPONSE="endTimerServiceRes";
 	public final static String PATIENT_GENDER = "gender";
 	public final static String PATIENT_DATEOFBIRTH = "dateOfBirth";
