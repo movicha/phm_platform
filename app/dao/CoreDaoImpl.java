@@ -130,11 +130,10 @@ public class CoreDaoImpl implements CoreDao {
 		Date date = new Date();
 		Long time = date.getTime();
 		Long epoachTime = time/1000;
-		
+		int remainingSecs = 24*3600 - (date.getHours()*3600+date.getMinutes()*60+date.getSeconds());
+
 		CriteriaQuery<PatientPanel> select = criteriaQuery.select(from);
-		select.where(criteriaBuilder.le(path, (epoachTime+28800)));
-		select.where(criteriaBuilder.ge(path, epoachTime));
-		 
+		select.where(criteriaBuilder.and(criteriaBuilder.ge(path, epoachTime), criteriaBuilder.le(path, (epoachTime+remainingSecs))));
 		TypedQuery<PatientPanel> typedQuery = JPA.em().createQuery(select);
 		List<PatientPanel> resultList = typedQuery.getResultList();
 		for(PatientPanel panel : resultList)
