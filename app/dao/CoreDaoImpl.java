@@ -125,6 +125,8 @@ public class CoreDaoImpl implements CoreDao {
 		CriteriaQuery<PatientPanel> criteriaQuery = criteriaBuilder.createQuery(PatientPanel.class);
 		Root<PatientPanel> from = criteriaQuery.from(PatientPanel.class);
 		Path<Number> path = from.join("providerSchedule").get("scheduleTime");
+		Predicate preUsername = criteriaBuilder.equal(from.get("user"),providerId);
+		//Predicate preUsername1 = criteriaBuilder.equal(from.get("providerSchedule"),providerId);
 		 
 		from.fetch("providerSchedule"); //FETCH product
 		Date date = new Date();
@@ -133,7 +135,7 @@ public class CoreDaoImpl implements CoreDao {
 		int remainingSecs = 24*3600 - (date.getHours()*3600+date.getMinutes()*60+date.getSeconds());
 
 		CriteriaQuery<PatientPanel> select = criteriaQuery.select(from);
-		select.where(criteriaBuilder.and(criteriaBuilder.ge(path, epoachTime), criteriaBuilder.le(path, (epoachTime+remainingSecs))));
+		select.where(criteriaBuilder.and(criteriaBuilder.ge(path, epoachTime), criteriaBuilder.le(path, (epoachTime+remainingSecs)),preUsername));
 		TypedQuery<PatientPanel> typedQuery = JPA.em().createQuery(select);
 		List<PatientPanel> resultList = typedQuery.getResultList();
 		for(PatientPanel panel : resultList)
